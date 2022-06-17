@@ -1,24 +1,46 @@
 import { useState, useEffect } from "react";
 import Bloglist from "./Bloglist";
+import useFetch from "./UseFetch";
 const Home = () => {
-    const [blogs, setBlogs] = useState([
-        { title: 'my new web', body: 'bfkjakjdvd', author: 'mario', id: 1 },
-        { title: 'my party', body: 'bfkjakjdvd', author: 'yoshi', id: 2 },
-        { title: 'my tips', body: 'bfkjakjdvd', author: 'mario', id: 3 }
-    ]);
-    const handleDelete = (id) => {
-        const newBlogs = blogs.filter((blog) => (
-            blog.id !== id
-        ))
-        setBlogs(newBlogs);
-    }
-    useEffect(() => {
-        console.log("hie");
-        console.log(blogs);
-    }, [])
+    // const [blogs, setBlogs] = useState([]);
+    // const [len, setLen] = useState(0);
+    // const [ispending, setIsPending] = useState(true);
+    // const handleDelete = (id) => {
+    //     const newBlogs = blogs.filter((blog) => (
+    //         blog.id !== id
+    //     ))
+    //     setBlogs(newBlogs);
+    // }
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         fetch('http://localhost:8000/blogs')
+    //             .then((res) => {
+    //                 console.log(res);
+    //                 if (!res.ok) {
+    //                     throw Error('could not fetch data');
+    //                 }
+    //                 return res.json();
+    //             })
+    //             .then(data => {
+    //                 setIsPending(false);
+    //                 setBlogs(data);
+    //                 let l = data.length
+    //                 setLen(l);
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err.message);
+    //             })
+    //         console.log("hie");
+    //         console.log(blogs);
+    //     }, 2000)
+
+    // }, [])
+    const { error, isPending, data: blogs } = useFetch('http://localhost:8000/blogs')
+    // console.log(blogs);
     return (
         <div className="home">
-            <Bloglist blogs={blogs} title="all blogs" handleDelete={handleDelete} />
+            {isPending && <div>Loading..........</div>}
+            {blogs && <Bloglist blogs={blogs} title="all blogs" />}
         </div>
 
     );
